@@ -1,0 +1,22 @@
+{
+  "name": "portable-secret",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild res/js/src/index.js --bundle --outfile=res/js/bundle.js --minify",
+    "watch": "esbuild res/js/src/index.js --bundle --outfile=res/js/bundle.js --minify --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.18.17",
+    "eslint": "^8.46.0",
+    "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "@jrc03c/js-crypto-helpers": "^0.0.8",
+    "vue": "^3.3.4"
+  }
+}
