@@ -260,7 +260,15 @@ module.exports = {
       else if (this.inputType === "file") {
         try {
           const raw = await readFile(this.file)
-          const encrypted = await encrypt(raw, this.password1)
+
+          const encrypted = await encrypt(
+            {
+              name: this.file.name,
+              data: raw,
+            },
+            this.password1,
+          )
+
           const out = template.replaceAll("{{ ENCRYPTED_DATA }}", encrypted)
           this.isDone = true
           return downloadHTML("secret.html", out)

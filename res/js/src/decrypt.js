@@ -38,6 +38,10 @@ const template = /* html */ `
     <div class="is-light is-success notification" v-if="isDone">
       Done! &nbsp; 🎉
     </div>
+
+    <div class="notification" v-if="isDone && result">
+      {{ result }}
+    </div>
   </div>
 `
 
@@ -50,6 +54,7 @@ module.exports = {
       isDone: false,
       message: "",
       password: "",
+      result: "",
     }
   },
 
@@ -69,8 +74,18 @@ module.exports = {
       try {
         // eslint-disable-next-line no-undef
         const out = await decrypt(encrypted, this.password)
-        console.log(out)
         this.isDone = true
+
+        if (typeof out === "string") {
+          this.result = out
+        } else {
+          const blob = new Blob([out.data])
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement("a")
+          a.href = url
+          a.download = out.name
+          a.click()
+        }
       } catch (e) {
         this.message = e.toString()
         this.$refs.password.disabled = false
