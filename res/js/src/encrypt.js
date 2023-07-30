@@ -1,14 +1,45 @@
 const { encrypt } = require("@jrc03c/js-crypto-helpers")
 
+function downloadText(filename, text) {
+  const a = document.createElement("a")
+  a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+  a.download = filename
+  a.dispatchEvent(new MouseEvent("click"))
+}
+
+function readFile(file, mode) {
+  mode = mode || "array-buffer"
+
+  return new Promise((resolve, reject) => {
+    try {
+      const reader = new FileReader()
+      reader.onload = event => resolve(event.target.result)
+
+      if (mode === "array-buffer") {
+        reader.readAsArrayBuffer(file)
+      } else if (mode === "binary-string") {
+        reader.readAsBinaryString(file)
+      } else if (mode === "data-url") {
+        reader.readAsDataURL(file)
+      } else if (mode === "text") {
+        reader.readAsText(file)
+      }
+    } catch (e) {
+      return reject(e)
+    }
+  })
+}
+
 const template = /* html */ `
   <div>
-    <form @submit.prevent="encrypt">
+    <form @submit.prevent="encrypt" v-if="!isDone">
       <p>
         <b style="margin-right: 0.75em;">Input type:</b>
 
         <label class="radio">
           <input
             name="input-type"
+            ref="textRadio"
             type="radio"
             v-model="inputType"
             value="text">
@@ -18,6 +49,7 @@ const template = /* html */ `
         <label class="radio">
           <input
             name="input-type"
+            ref="fileRadio"
             type="radio"
             v-model="inputType"
             value="file">
@@ -38,8 +70,9 @@ const template = /* html */ `
         <div v-if="inputType === 'file'">
           <button
             :class="{ 'is-primary': !file, 'is-dark': !!file }" 
-            @click="selectFile"
-            class="button">
+            @click.prevent.stop="selectFile"
+            class="button"
+            ref="fileButton">
             {{ file ? file.name : "Select file..." }}
           </button>
         </div>
@@ -56,6 +89,7 @@ const template = /* html */ `
               :class="{ 'is-success': password1.trim().length > 0 }"
               class="input"
               placeholder="password"
+              ref="password1"
               type="password"
               v-model="password1">
           </div>
@@ -74,13 +108,14 @@ const template = /* html */ `
               }"
               class="input"
               placeholder="confirm password"
+              ref="password2"
               type="password"
               v-model="password2">
           </div>
         </div>
       </p>
 
-      <div>
+      <p>
         <button
           :disabled="
             (inputType === 'text' && !text) ||
@@ -88,13 +123,21 @@ const template = /* html */ `
             password1.trim().length === 0 ||
             password2 !== password1
           "
-          @click="encrypt"
           class="button is-warning"
+          ref="submit"
           type="submit">
           Encrypt
         </button>
+      </p>
+
+      <div class="notification is-danger" v-if="message.length > 0">
+        {{ message }}
       </div>
     </form>
+
+    <div class="notification is-light is-success" v-else>
+      Done! &nbsp; 🎉
+    </div>
   </div>
 `
 
@@ -106,6 +149,8 @@ module.exports = {
     return {
       file: null,
       inputType: "text",
+      isDone: false,
+      message: "",
       password1: "",
       password2: "",
       text: "",
@@ -123,7 +168,86 @@ module.exports = {
   },
 
   methods: {
-    encrypt() {},
+    async encrypt() {
+      if (this.password1.trim().length === 0) {
+        this.$refs.password1.focus()
+        this.$refs.password1.select()
+        return
+      }
+
+      if (this.password2 !== this.password1) {
+        this.$refs.password2.focus()
+        this.$refs.password2.select()
+        return
+      }
+
+      this.$refs.textRadio.disabled = true
+      this.$refs.textRadio.readOnly = true
+      this.$refs.fileRadio.disabled = true
+      this.$refs.fileRadio.readOnly = true
+      this.$refs.password1.disabled = true
+      this.$refs.password1.readOnly = true
+      this.$refs.password2.disabled = true
+      this.$refs.password2.readOnly = true
+      this.$refs.submit.disabled = true
+      this.$refs.submit.classList.add("is-loading")
+
+      // encrypt text
+      if (this.inputType === "text") {
+        this.$refs.textarea.disabled = true
+        this.$refs.textarea.readOnly = true
+
+        try {
+          const out = await encrypt(this.text, this.password1)
+          this.isDone = true
+          downloadText("encrypted.txt", out)
+        } catch (e) {
+          this.message = e.toString()
+          this.$refs.textRadio.disabled = false
+          this.$refs.textRadio.readOnly = false
+          this.$refs.fileRadio.disabled = false
+          this.$refs.fileRadio.readOnly = false
+          this.$refs.textarea.disabled = false
+          this.$refs.textarea.readOnly = false
+          this.$refs.password1.disabled = false
+          this.$refs.password1.readOnly = false
+          this.$refs.password2.disabled = false
+          this.$refs.password2.readOnly = false
+          this.$refs.submit.disabled = false
+          this.$refs.submit.classList.remove("is-loading")
+          this.$refs.password2.focus()
+          this.$refs.password2.select()
+        }
+      }
+
+      // encrypt file
+      else if (this.inputType === "file") {
+        this.$refs.fileButton.disabled = true
+
+        try {
+          const raw = await readFile(this.file)
+          const out = await encrypt(raw, this.password1)
+          this.isDone = true
+          const rawName = this.file.name.split(".").slice(0, -1).join(".")
+          downloadText(rawName + ".encrypted.txt", out)
+        } catch (e) {
+          this.message = e.toString()
+          this.$refs.textRadio.disabled = false
+          this.$refs.textRadio.readOnly = false
+          this.$refs.fileRadio.disabled = false
+          this.$refs.fileRadio.readOnly = false
+          this.$refs.fileButton.disabled = false
+          this.$refs.password1.disabled = false
+          this.$refs.password1.readOnly = false
+          this.$refs.password2.disabled = false
+          this.$refs.password2.readOnly = false
+          this.$refs.submit.disabled = false
+          this.$refs.submit.classList.remove("is-loading")
+          this.$refs.password2.focus()
+          this.$refs.password2.select()
+        }
+      }
+    },
 
     selectFile() {
       const input = document.createElement("input")
