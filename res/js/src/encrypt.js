@@ -3,7 +3,9 @@ const { encrypt } = require("@jrc03c/js-crypto-helpers")
 const template = /* html */ `
   <div>
     <form @submit.prevent="encrypt">
-      <div class="control">
+      <p>
+        <b style="margin-right: 0.75em;">Input type:</b>
+
         <label class="radio">
           <input
             name="input-type"
@@ -21,7 +23,16 @@ const template = /* html */ `
             value="file">
           File
         </label>
-      </div>
+      </p>
+
+      <textarea
+        autofocus
+        class="textarea"
+        placeholder="Type your secret message here."
+        ref="textarea"
+        v-if="inputType === 'text'"
+        v-model="text">
+      </textarea>
     </form>
   </div>
 `
@@ -33,7 +44,18 @@ module.exports = {
   data() {
     return {
       inputType: "text",
+      text: "",
     }
+  },
+
+  watch: {
+    inputType() {
+      if (this.inputType === "text") {
+        setTimeout(() => {
+          this.$refs.textarea.focus()
+        }, 100)
+      }
+    },
   },
 
   methods: {
