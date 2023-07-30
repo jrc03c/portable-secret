@@ -13,6 +13,7 @@
   "devDependencies": {
     "esbuild": "^0.18.17",
     "eslint": "^8.46.0",
+    "eslint-plugin-vue": "^9.16.0",
     "prettier": "^3.0.0"
   },
   "dependencies": {
