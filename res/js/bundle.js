@@ -38,6 +38,18 @@ const ${c.map(u=>`_${Xe[u]} = ${Xe[u]}`).join(", ")}
 `;um.exports={name:"x-encrypt",template:YT}});var{createApp:XT}=om(),QT=cm(),ZT=hm();window.addEventListener("load",()=>{let s=document.querySelector("#encrypt-app")||document.querySelector("#decrypt-app"),t=`
     <section class="section">
       <div class="container">
+        <h1 class="title">Portable Secret</h1>
+
+        <h2 class="subtitle">
+          Inspired by
+          <a
+            href="https://github.com/mprimi/portable-secret"
+            rel="noreferrer"
+            target="_blank">
+            mprimi/portable-secret
+          </a>
+        </h2>
+
         ${s.id==="encrypt-app"?"<x-encrypt></x-encrypt>":"<x-decrypt></x-decrypt>"}
       </div>
     </section>
