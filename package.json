@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild res/js/src/index.js --bundle --outfile=res/js/bundle.js --minify",
-    "watch": "esbuild res/js/src/index.js --bundle --outfile=res/js/bundle.js --minify --watch"
+    "build": "node build.js",
+    "watch": "node build.js --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@jrc03c/watch": "^0.0.10",
     "esbuild": "^0.18.17",
     "eslint": "^8.46.0",
     "eslint-plugin-vue": "^9.16.0",

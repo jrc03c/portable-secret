@@ -34,7 +34,7 @@ const template = /* html */ `
   <div>
     <form @submit.prevent="encrypt" v-if="!isDone">
       <p>
-        <b style="margin-right: 0.75em;">Input type:</b>
+        <b style="margin-right: 0.75rem;">Input type:</b>
 
         <label class="radio">
           <input
@@ -87,6 +87,7 @@ const template = /* html */ `
           <div class="control">
             <input
               :class="{ 'is-success': password1.trim().length > 0 }"
+              @input="message = ''"
               class="input"
               placeholder="password"
               ref="password1"
@@ -106,6 +107,7 @@ const template = /* html */ `
                   password1.trim().length > 0 &&
                   password2 === password1
               }"
+              @input="message = ''"
               class="input"
               placeholder="confirm password"
               ref="password2"
@@ -130,12 +132,12 @@ const template = /* html */ `
         </button>
       </p>
 
-      <div class="notification is-danger" v-if="message.length > 0">
+      <div class="is-danger is-light notification" v-if="message.length > 0">
         {{ message }}
       </div>
     </form>
 
-    <div class="notification is-light is-success" v-else>
+    <div class="is-light is-success notification" v-else>
       Done! &nbsp; 🎉
     </div>
   </div>
@@ -227,7 +229,7 @@ module.exports = {
 
       this.disableFormControls()
 
-      const response = await fetch("template.html")
+      const response = await fetch("template-bundle.html")
       const template = await response.text()
 
       if (response.status !== 200) {

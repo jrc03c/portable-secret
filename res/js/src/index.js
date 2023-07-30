@@ -12,16 +12,6 @@ window.addEventListener("load", () => {
       <div class="container">
         <h1 class="title">Portable Secret</h1>
 
-        <h2 class="subtitle">
-          Inspired by
-          <a
-            href="https://github.com/mprimi/portable-secret"
-            rel="noreferrer"
-            target="_blank">
-            mprimi/portable-secret
-          </a>
-        </h2>
-
         <hr>
 
         ${
