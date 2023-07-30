@@ -271,7 +271,7 @@ module.exports = {
 
           const out = template.replaceAll("{{ ENCRYPTED_DATA }}", encrypted)
           this.isDone = true
-          return downloadHTML("secret.html", out)
+          return downloadHTML(this.file.name + ".html", out)
         } catch (e) {
           this.message = e.toString()
           this.enableFormControls()
