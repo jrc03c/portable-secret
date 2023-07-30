@@ -88,6 +88,7 @@ const template = /* html */ `
             <input
               :class="{ 'is-success': password1.trim().length > 0 }"
               @input="message = ''"
+              @keydown.prevent.stop.enter="encrypt"
               class="input"
               placeholder="password"
               ref="password1"
