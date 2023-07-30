@@ -97,9 +97,18 @@ const ${c.map(u=>`_${ct[u]} = ${ct[u]}`).join(", ")}
         v-if="inputType === 'text'"
         v-model="text">
       </textarea>
+
+      <div v-if="inputType === 'file'">
+        <button
+          :class="{ 'is-primary': !file, 'is-dark': !!file }" 
+          @click="selectFile"
+          class="button">
+          {{ file ? file.name : "Select file..." }}
+        </button>
+      </div>
     </form>
   </div>
-`;hw.exports={name:"x-encrypt",template:h8,data(){return{inputType:"text",text:""}},watch:{inputType(){this.inputType==="text"&&setTimeout(()=>{this.$refs.textarea.focus()},100)}},methods:{encrypt(){}}}});var{createApp:p8}=wb(),f8=Eb(),d8=pw();window.addEventListener("load",()=>{let s=document.querySelector("#encrypt-app")||document.querySelector("#decrypt-app"),t=`
+`;hw.exports={name:"x-encrypt",template:h8,data(){return{file:null,inputType:"text",text:""}},watch:{inputType(){this.inputType==="text"&&setTimeout(()=>{this.$refs.textarea.focus()},100)}},methods:{encrypt(){},selectFile(){let s=document.createElement("input");s.type="file",s.addEventListener("input",()=>{s.files.length>0&&(this.file=s.files[0])}),s.dispatchEvent(new MouseEvent("click"))}}}});var{createApp:p8}=wb(),f8=Eb(),d8=pw();window.addEventListener("load",()=>{let s=document.querySelector("#encrypt-app")||document.querySelector("#decrypt-app"),t=`
     <section class="section">
       <div class="container">
         <h1 class="title">Portable Secret</h1>
