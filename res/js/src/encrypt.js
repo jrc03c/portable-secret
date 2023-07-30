@@ -108,6 +108,7 @@ const template = /* html */ `
                   password2 === password1
               }"
               @input="message = ''"
+              @keydown.prevent.stop.enter="encrypt"
               class="input"
               placeholder="confirm password"
               ref="password2"

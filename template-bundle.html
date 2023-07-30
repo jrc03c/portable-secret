@@ -202,6 +202,7 @@ const ${c.map(u=>`_${ct[u]} = ${ct[u]}`).join(", ")}
                   password2 === password1
               }"
               @input="message = ''"
+              @keydown.prevent.stop.enter="encrypt"
               class="input"
               placeholder="confirm password"
               ref="password2"
