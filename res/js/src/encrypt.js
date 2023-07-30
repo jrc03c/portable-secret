@@ -170,7 +170,7 @@ module.exports = {
   },
 
   methods: {
-    disableFormControls(){
+    disableFormControls() {
       this.$refs.textRadio.disabled = true
       this.$refs.textRadio.readOnly = true
       this.$refs.fileRadio.disabled = true
@@ -182,17 +182,17 @@ module.exports = {
       this.$refs.submit.disabled = true
       this.$refs.submit.classList.add("is-loading")
 
-      if (this.inputType === "text"){
+      if (this.inputType === "text") {
         this.$refs.textarea.disabled = true
         this.$refs.textarea.readOnly = true
       }
 
-      if (this.inputType === "file"){
+      if (this.inputType === "file") {
         this.$refs.fileButton.disabled = true
       }
     },
 
-    enableFormControls(){
+    enableFormControls() {
       this.$refs.textRadio.disabled = false
       this.$refs.textRadio.readOnly = false
       this.$refs.fileRadio.disabled = false
@@ -204,12 +204,12 @@ module.exports = {
       this.$refs.submit.disabled = false
       this.$refs.submit.classList.remove("is-loading")
 
-      if (this.inputType === "text"){
+      if (this.inputType === "text") {
         this.$refs.textarea.disabled = false
         this.$refs.textarea.readOnly = false
       }
 
-      if (this.inputType === "file"){
+      if (this.inputType === "file") {
         this.$refs.fileButton.disabled = false
       }
     },
@@ -239,7 +239,6 @@ module.exports = {
         this.$refs.password2.select()
         return
       }
-
 
       // encrypt text
       if (this.inputType === "text") {

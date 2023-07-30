@@ -10,7 +10,7 @@ function rebuild() {
   try {
     execSync(
       `npx esbuild res/js/src/index.js --bundle --outfile=res/js/bundle.js --minify`,
-      { encoding: "utf8" }
+      { encoding: "utf8" },
     )
 
     const template = fs.readFileSync("template.html", "utf8")
@@ -18,17 +18,20 @@ function rebuild() {
     const globalCSS = fs.readFileSync("res/css/global.css", "utf8")
     const bundle = fs.readFileSync("res/js/bundle.js", "utf8")
 
-    const out = template.split("\n").map(line => {
-      if (line.includes("{{ ALL_THE_JS }}")) {
-        return bundle
-      } else if (line.includes("{{ BULMA_CSS }}")) {
-        return bulmaCSS
-      } else if (line.includes("{{ GLOBAL_CSS }}")) {
-        return globalCSS
-      } else {
-        return line
-      }
-    }).join("\n")
+    const out = template
+      .split("\n")
+      .map(line => {
+        if (line.includes("{{ ALL_THE_JS }}")) {
+          return bundle
+        } else if (line.includes("{{ BULMA_CSS }}")) {
+          return bulmaCSS
+        } else if (line.includes("{{ GLOBAL_CSS }}")) {
+          return globalCSS
+        } else {
+          return line
+        }
+      })
+      .join("\n")
 
     fs.writeFileSync("template-bundle.html", out, "utf8")
     console.log("\nDone! 🎉\n")

@@ -45,7 +45,7 @@ module.exports = {
   name: "x-decrypt",
   template,
 
-  data(){
+  data() {
     return {
       isDone: false,
       message: "",
@@ -54,7 +54,7 @@ module.exports = {
   },
 
   methods: {
-    async decrypt(){
+    async decrypt() {
       if (this.password.trim().length === 0) {
         this.$refs.password.focus()
         this.$refs.password.select()
@@ -67,10 +67,11 @@ module.exports = {
       this.$refs.submit.classList.add("is-loading")
 
       try {
+        // eslint-disable-next-line no-undef
         const out = await decrypt(encrypted, this.password)
         console.log(out)
         this.isDone = true
-      } catch(e) {
+      } catch (e) {
         this.message = e.toString()
         this.$refs.password.disabled = false
         this.$refs.password.readOnly = false
