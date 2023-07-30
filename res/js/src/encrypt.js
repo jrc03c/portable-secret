@@ -25,21 +25,73 @@ const template = /* html */ `
         </label>
       </p>
 
-      <textarea
-        autofocus
-        class="textarea"
-        placeholder="Type your secret message here."
-        ref="textarea"
-        v-if="inputType === 'text'"
-        v-model="text">
-      </textarea>
+      <p>
+        <textarea
+          autofocus
+          class="textarea"
+          placeholder="Type your secret message here."
+          ref="textarea"
+          v-if="inputType === 'text'"
+          v-model="text">
+        </textarea>
 
-      <div v-if="inputType === 'file'">
+        <div v-if="inputType === 'file'">
+          <button
+            :class="{ 'is-primary': !file, 'is-dark': !!file }" 
+            @click="selectFile"
+            class="button">
+            {{ file ? file.name : "Select file..." }}
+          </button>
+        </div>
+      </p>
+
+      <p>
+        <div class="field">
+          <label class="label">
+            Password:
+          </label>
+
+          <div class="control">
+            <input
+              :class="{ 'is-success': password1.trim().length > 0 }"
+              class="input"
+              placeholder="password"
+              type="password"
+              v-model="password1">
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <input
+              :class="{
+                'is-danger':
+                  password1.trim().length > 0 &&
+                  password2 !== password1,
+                'is-success':
+                  password1.trim().length > 0 &&
+                  password2 === password1
+              }"
+              class="input"
+              placeholder="confirm password"
+              type="password"
+              v-model="password2">
+          </div>
+        </div>
+      </p>
+
+      <div>
         <button
-          :class="{ 'is-primary': !file, 'is-dark': !!file }" 
-          @click="selectFile"
-          class="button">
-          {{ file ? file.name : "Select file..." }}
+          :disabled="
+            (inputType === 'text' && !text) ||
+            (inputType === 'file' && !file) ||
+            password1.trim().length === 0 ||
+            password2 !== password1
+          "
+          @click="encrypt"
+          class="button is-warning"
+          type="submit">
+          Encrypt
         </button>
       </div>
     </form>
@@ -54,6 +106,8 @@ module.exports = {
     return {
       file: null,
       inputType: "text",
+      password1: "",
+      password2: "",
       text: "",
     }
   },

@@ -22,6 +22,8 @@ window.addEventListener("load", () => {
           </a>
         </h2>
 
+        <hr>
+
         ${
           container.id === "encrypt-app"
             ? "<x-encrypt></x-encrypt>"
