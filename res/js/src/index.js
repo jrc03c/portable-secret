@@ -12,6 +12,15 @@ window.addEventListener("load", () => {
       <div class="container">
         <h1 class="title">Portable Secret</h1>
 
+        <h2 class="subtitle">
+          <a
+            href="https://github.com/jrc03c/portable-secret"
+            rel="noreferrer"
+            target="_blank">
+            jrc03c/portable-secret
+          </a>
+        </h2>
+
         <hr>
 
         ${
