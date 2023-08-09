@@ -1,9 +1,13 @@
 const { encrypt } = require("@jrc03c/js-crypto-helpers")
 
-function downloadHTML(filename, text) {
+function getHTMLDataUrl(html) {
+  return "data:text/html;charset=utf-8," + encodeURIComponent(html)
+}
+
+function downloadHTML(outfile, dataUrl) {
   const a = document.createElement("a")
-  a.href = "data:text/html;charset=utf-8," + encodeURIComponent(text)
-  a.download = filename
+  a.href = dataUrl
+  a.download = outfile
   a.dispatchEvent(new MouseEvent("click"))
 }
 
@@ -33,7 +37,7 @@ function readFile(file, mode) {
 const template = /* html */ `
   <div>
     <form @submit.prevent="encrypt" v-if="!isDone">
-      <p>
+      <div style="margin-bottom: 0.5em;">
         <b style="margin-right: 0.75rem;">Input type:</b>
 
         <label class="radio">
@@ -55,7 +59,7 @@ const template = /* html */ `
             value="file">
           File
         </label>
-      </p>
+      </div>
 
       <p>
         <textarea
@@ -63,6 +67,7 @@ const template = /* html */ `
           class="textarea"
           placeholder="Type your secret message here."
           ref="textarea"
+          rows="3"
           v-if="inputType === 'text'"
           v-model="text">
         </textarea>
@@ -140,7 +145,13 @@ const template = /* html */ `
     </form>
 
     <div class="is-light is-success notification" v-else>
-      Done! &nbsp; 🎉
+      <p><b>Done!</b> &nbsp; 🎉</p>
+      
+      <div>
+        The encrypted file should be downloaded automatically, but you can also
+        click <a :download="outfile" :href="dataUrl">here</a> to download it
+        manually.
+      </div>
     </div>
   </div>
 `
@@ -151,10 +162,12 @@ module.exports = {
 
   data() {
     return {
+      dataUrl: null,
       file: null,
       inputType: "text",
       isDone: false,
       message: "",
+      outfile: null,
       password1: "",
       password2: "",
       text: "",
@@ -248,7 +261,9 @@ module.exports = {
           const encrypted = await encrypt(this.text, this.password1)
           const out = template.replaceAll("{{ ENCRYPTED_DATA }}", encrypted)
           this.isDone = true
-          return downloadHTML("secret.html", out)
+          this.outfile = "secret.html"
+          this.dataUrl = getHTMLDataUrl(out)
+          return downloadHTML(this.outfile, this.dataUrl)
         } catch (e) {
           this.message = e.toString()
           this.enableFormControls()
@@ -273,7 +288,9 @@ module.exports = {
 
           const out = template.replaceAll("{{ ENCRYPTED_DATA }}", encrypted)
           this.isDone = true
-          return downloadHTML(this.file.name + ".html", out)
+          this.outfile = this.file.name + ".html"
+          this.dataUrl = getHTMLDataUrl(out)
+          return downloadHTML(this.outfile, this.dataUrl)
         } catch (e) {
           this.message = e.toString()
           this.enableFormControls()
