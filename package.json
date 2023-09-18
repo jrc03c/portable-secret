@@ -18,7 +18,7 @@
     "prettier": "^3.0.0"
   },
   "dependencies": {
-    "@jrc03c/js-crypto-helpers": "^0.0.8",
+    "@jrc03c/js-crypto-helpers": "^0.0.9",
     "vue": "^3.3.4"
   }
 }
