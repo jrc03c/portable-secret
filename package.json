@@ -1,15 +1,10 @@
 {
-  "name": "portable-secret",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "node build.js",
-    "watch": "node build.js --watch"
-  },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "@jrc03c/js-crypto-helpers": "^0.0.9",
+    "vue": "^3.3.4"
+  },
+  "description": "",
   "devDependencies": {
     "@jrc03c/watch": "^0.0.10",
     "esbuild": "^0.18.17",
@@ -17,8 +12,13 @@
     "eslint-plugin-vue": "^9.16.0",
     "prettier": "^3.0.0"
   },
-  "dependencies": {
-    "@jrc03c/js-crypto-helpers": "^0.0.9",
-    "vue": "^3.3.4"
-  }
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "portable-secret",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "version": "0.0.1"
 }
